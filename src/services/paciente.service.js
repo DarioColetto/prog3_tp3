@@ -1,4 +1,4 @@
-const repo = require('../repositories/paciente.repository');
+const repo = require('../repository/paciente.repo');
 
 class PacienteService {
 
@@ -22,6 +22,9 @@ class PacienteService {
         return await repo.delete(id);
     }
     
+    async getByEmail(email) {
+        return await repo.getByEmail(email);
+    }
 }
 
 module.exports = new PacienteService();

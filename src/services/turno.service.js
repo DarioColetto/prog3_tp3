@@ -1,4 +1,4 @@
-const repo = require('../repositories/turno.repository');
+const repo = require('../repository/turno.repo');
 
 class TurnoService {
 
