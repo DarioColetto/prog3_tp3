@@ -3,6 +3,9 @@ const repo = require('../repository/paciente.repo');
 class PacienteService {
 
     async list() {
+
+        
+
         return await repo.list();
     }
     
@@ -11,10 +14,27 @@ class PacienteService {
     }
     
     async create(data) {
+        // Check if the required fields are present
+        if (!data.dni || !data.nombre || !data.apellido || !data.email || !data.password) {
+            throw new Error('Missing required fields: dni, nombre, apellido, email, password');
+        }
+
+        // Check if the email already exists
+        const existingPaciente = await repo.getByEmail(data.email);
+        if (existingPaciente) {
+            throw new Error('A patient with this email already exists');
+        }
+
         return await repo.create(data);
     }
     
     async update(id, data) {
+
+        // Check if the required fields are present
+        if (!data.dni || !data.nombre || !data.apellido || !data.email || !data.password) {
+            throw new Error('Missing required fields: dni, nombre, apellido, email, password');
+        }
+
         return await repo.update(id, data);
     }
     

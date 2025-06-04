@@ -26,4 +26,11 @@ const Paciente = sequelize.define('Paciente', {
   }
 });
 
+Paciente.findAll().then(pacientes => {
+ data = pacientes.map(paciente => paciente.toJSON());
+ console.log(data);
+})
+
+
+
 module.exports = Paciente;

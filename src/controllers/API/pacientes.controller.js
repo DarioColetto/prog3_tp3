@@ -1,27 +1,33 @@
 const pacienteService = require("../../services/paciente.service.js");
 
 
+
 class PacientesController {
   
   async list(req, res) {
+    
+    
     const data = await pacienteService.list();
+
+    if (!data || data.length === 0) {
+      return res.status(404).json({ error: "No hay pacientes registrados" });
+    }
+
     res.status(200).json(data);
     
   }
 
 
   async create(req, res) {
-    const { dni, nombre, apellido, email, password } = req.body;
-
-    if (!dni || !nombre || !apellido || !email || !password) {
-      return res.status(400).json({ error: "Faltan datos obligatorios" });
-    }
+    
     try {
-      const nuevoPaciente = new Paciente(dni, nombre, apellido, email, password);
-      const pacienteCreado = await pacienteService.create(nuevoPaciente);
+    
+    const { dni, nombre, apellido, email, password } = req.body;
+    const nuevoPaciente = {'dni': dni, 'nombre': nombre, 'apellido': apellido, 'email': email, 'password': password};
+    const pacienteCreado = await pacienteService.create(nuevoPaciente);
       res.status(201).json({ message: "Paciente creado", id: pacienteCreado.id });
     } catch (error) {
-      res.status(500).json({ error: error.message || "Error al crear el paciente" });
+      res.status(400).json({ error: error.message || "Error al crear el paciente" });
     }
   }
 
@@ -32,13 +38,10 @@ class PacientesController {
     const id = req.params.id;
     
 
+    //Devuelve 0 si no se encuentra el paciente
+    await pacienteService.delete(id);
+    res.status(200).json({ message: "Paciente borrado correctamente", id: id });
 
-    const pacienteBorrado = await pacienteService.delete(id);
-    if (!pacienteBorrado) {
-      return res.status(404).json({ error: "Paciente no encontrado" });
-    }
-
-    res.status(200).json(pacienteBorrado);
     }
       catch (error) {
         res
@@ -52,9 +55,11 @@ class PacientesController {
     try{
       const id = req.params.id;
       const { dni, nombre, apellido, email, password } = req.body;
-      const nuevoPaciente = new Paciente(dni, nombre, apellido, email, password);
-      const pac = await pacientesModel.update(id, nuevoPaciente);
-      res.status(200).json({ message: "actualizado", "id":pac.id });
+      const nuevoPaciente = {'dni': dni, 'nombre': nombre, 'apellido': apellido, 'email': email, 'password': password};
+     
+      await pacienteService.update(id, nuevoPaciente);
+
+      res.status(200).json({ message: "actualizado", "id":id });
 
     }
     catch (error) {

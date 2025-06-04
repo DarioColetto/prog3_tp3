@@ -1,4 +1,4 @@
-const Config = require("./../../config/config.js");
+const Config = require("../config/config.js");
 const jwt = require("jsonwebtoken");
 const pacienteService = require("./paciente.service.js");
 

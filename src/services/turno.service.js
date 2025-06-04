@@ -6,8 +6,8 @@ class TurnoService {
         return await repo.list();
     }
     
-    async getById(id) {
-        return await repo.getById(id);
+    async getAllById(id) {
+        return await repo.getAllById(id);
     }
     
     async create(data) {

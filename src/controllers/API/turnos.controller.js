@@ -1,4 +1,4 @@
-const TurnoService = require('../../services/turno.service');
+const turnoService = require('../../services/turno.service');
 
 //Todo: Cambiar por el modelo de datos que se esté utilizando
 
@@ -6,14 +6,23 @@ class TurnosController {
   getByPaciente(req, res) {
     const idPaciente = req.params.idPaciente;
 
+    if (!idPaciente) {
+      return res.status(400).json({ error: "Falta el ID del paciente" });
+    }
     
-    const turnos = turnosModel.getByPaciente(idPaciente);
+    // 
+    const turnos = turnoService.getAllById(idPaciente);
     res.json(turnos);
   }
 
   delete(req, res) {
     const idTurno = req.params.idTurno;
-    const deleted = turnosModel.delete(idTurno);
+
+    if (!idTurno) { 
+        return res.status(400).json({ error: "Falta el ID del turno" });
+        }
+
+    const deleted = turnoService.delete(idTurno);
     if (deleted) {
       res.json({ message: "Turno cancelado correctamente" });
     } else {
@@ -31,7 +40,7 @@ class TurnosController {
         idPaciente: Number(idPaciente),
         fechaHora: new Date(fechaHora)
       };
-      const nuevoTurno = turnosModel.create(turno);
+      const nuevoTurno = turnoService.create(turno);
       res.status(201).json(nuevoTurno);
     } catch (error) {
       res.status(500).json({ error: error.message });
