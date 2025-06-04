@@ -6,12 +6,15 @@ class TurnosController {
   async getByPaciente(req, res) {
     
     const idPaciente = req.params.idPaciente;
-     await turnoService.getAllById(idPaciente).then((turnos) => {
-        res.json(turnos);})
+    await turnoService.getAllById(idPaciente).then((turnos) => {
+        res.json(turnos);
+        res.render('turnos', { turnos });
+    })
       .catch((error) => {
         res.status(404).json({ error: error.message || "No se encontraron turnos para el paciente" });
       });
     
+     
   }
 
   async delete(req, res) {
