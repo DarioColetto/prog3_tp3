@@ -1,4 +1,4 @@
-const { Paciente } = require('../models/paciente.model');
+const  Paciente = require('../models/sqlite/entities/paciente.entity.js');
 
 class PacienteRepository {
 
@@ -8,6 +8,10 @@ class PacienteRepository {
     
     async getById(id) {
         return await Paciente.findByPk(id);
+    }
+
+    async getByEmail(email) {
+        return await Paciente.findOne({ where: { email } });
     }
     
     async create(data) {
