@@ -1,0 +1,20 @@
+const pacientesModel = require("./../../models/mock/pacientes.models.js");
+
+class LoginControler{
+
+    async login(req, res) {
+    //recolecto credenciales
+    try {
+      const { email, password } = req.body;
+
+      const token = await pacientesModel.validate(email, password);
+
+      res.status(200).json(token);
+    } catch (error) {
+      res.status(401).json({ message: error.message });
+    }
+  }
+
+}
+
+module.exports = new LoginControler();

@@ -7,10 +7,15 @@ const sequelize = new Sequelize({
   logging: false
 });
 
+// Importa los modelos aquí
+require('../entities/paciente.entity')(sequelize);
+require('../entities/turno.entity')(sequelize);
+// ...otros modelos
+
 const connectDB = async () => {
   try {
     await sequelize.sync();
-    console.log('Base de datos conectada.');
+    console.log('Modelos sincronizados con la base de datos');
   } catch (error) {
     console.error('Error conectando a la base de datos:', error);
   }

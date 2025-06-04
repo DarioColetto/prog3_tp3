@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/santozzi/practico3progra3.git"
+    "url": "git+https://github.com/DarioColetto/prog3_tp3.git"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/santozzi/practico3progra3/issues"
   },
-  "homepage": "https://github.com/santozzi/practico3progra3#readme",
+  "homepage": "https://github.com/DarioColetto/prog3_tp3#readme",
   "dependencies": {
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
