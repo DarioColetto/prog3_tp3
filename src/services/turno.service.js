@@ -7,11 +7,22 @@ class TurnoService {
     }
     
     async getAllById(id) {
+
+    if (!id) {
+        throw new Error('ID es requerido para obtener los turnos');
+    }
+    
         return await repo.getAllById(id);
     }
     
-    async create(data) {
-        return await repo.create(data);
+    async create(turno) {
+        
+        if (!turno.idPaciente || !turno.fechaHora) {
+            throw new Error('ID del paciente y fecha/hora son requeridos para crear un turno');
+        }
+      
+       return await repo.create(turno)
+           
     }
     
     async update(id, data) {
@@ -19,6 +30,9 @@ class TurnoService {
     }
     
     async delete(id) {
+        if (!id) { 
+            throw new Error('ID del turno es requerido');
+        }
         return await repo.delete(id);
     }
     

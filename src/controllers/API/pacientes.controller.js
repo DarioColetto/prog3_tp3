@@ -12,29 +12,27 @@ class PacientesController {
   }
 
   async create(req, res) {
-    
-      const { dni, nombre, apellido, email, password } = req.body;
-      const nuevoPaciente = {
-        dni: dni,
-        nombre: nombre,
-        apellido: apellido,
-        email: email,
-        password: password,
-      };
-      await pacienteService.create(nuevoPaciente).then(
-        (paciente) => {;
-      res
-        .status(201)
-        .json({ message: "Paciente creado", id: paciente.id });
-    }) .catch((error)  =>{
-      res
-        .status(400)
-        .json({ error: error.message || "Error al crear el paciente" });
-    })
+    const { dni, nombre, apellido, email, password } = req.body;
+    const nuevoPaciente = {
+      dni: dni,
+      nombre: nombre,
+      apellido: apellido,
+      email: email,
+      password: password,
+    };
+    await pacienteService
+      .create(nuevoPaciente)
+      .then((paciente) => {
+        res.status(201).json({ message: "Paciente creado", id: paciente.id });
+      })
+      .catch((error) => {
+        res
+          .status(400)
+          .json({ error: error.message || "Error al crear el paciente" });
+      });
   }
 
   async delete(req, res) {
-
     const id = req.params.id;
     await pacienteService
       .delete(id)
@@ -52,27 +50,29 @@ class PacientesController {
   }
 
   async update(req, res) {
-    
-      const id = req.params.id;
-      const { dni, nombre, apellido, email, password } = req.body;
-      const nuevoPaciente = {
-        dni: dni,
-        nombre: nombre,
-        apellido: apellido,
-        email: email,
-        password: password,
-      };
+    const id = req.params.id;
+    const { dni, nombre, apellido, email, password } = req.body;
+    const nuevoPaciente = {
+      dni: dni,
+      nombre: nombre,
+      apellido: apellido,
+      email: email,
+      password: password,
+    };
 
-      await pacienteService.update(id, nuevoPaciente).then((updated) => {
+    await pacienteService
+      .update(id, nuevoPaciente)
+      .then((updated) => {
         if (updated[0] === 0) {
           throw new Error("Paciente no encontrado o no se realizaron cambios");
         }
         res.status(200).json({ message: "actualizado", id: id });
-      }).catch((error) => {
-        res.status(400).json({ error: error.message || "Error al actualizar el paciente" });
       })
-
-    
+      .catch((error) => {
+        res
+          .status(400)
+          .json({ error: error.message || "Error al actualizar el paciente" });
+      });
   }
 }
 

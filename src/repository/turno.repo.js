@@ -7,7 +7,7 @@ class TurnoRepository{
     }
     
     async getAllById(id) {
-        return await Turno.findAll( { where: { pacienteId: id } });
+        return await Turno.findAll( { where: { idPaciente: id } });
     }
     
     async create(data) {

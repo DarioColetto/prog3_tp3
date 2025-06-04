@@ -3,49 +3,51 @@ const turnoService = require('../../services/turno.service');
 //Todo: Cambiar por el modelo de datos que se esté utilizando
 
 class TurnosController {
-  getByPaciente(req, res) {
-    const idPaciente = req.params.idPaciente;
-
-    if (!idPaciente) {
-      return res.status(400).json({ error: "Falta el ID del paciente" });
-    }
+  async getByPaciente(req, res) {
     
-    // 
-    const turnos = turnoService.getAllById(idPaciente);
-    res.json(turnos);
+    const idPaciente = req.params.idPaciente;
+     await turnoService.getAllById(idPaciente).then((turnos) => {
+        res.json(turnos);})
+      .catch((error) => {
+        res.status(404).json({ error: error.message || "No se encontraron turnos para el paciente" });
+      });
+    
   }
 
-  delete(req, res) {
+  async delete(req, res) {
+    
     const idTurno = req.params.idTurno;
 
-    if (!idTurno) { 
-        return res.status(400).json({ error: "Falta el ID del turno" });
-        }
+   
 
-    const deleted = turnoService.delete(idTurno);
-    if (deleted) {
-      res.json({ message: "Turno cancelado correctamente" });
-    } else {
-      res.status(404).json({ error: "No se encontró el turno" });
-    }
+    await turnoService.delete(idTurno).then((deleted) => {
+        if (!deleted) {
+            throw new Error("No se encontró el turno");
+            }
+        res.json({ message: "Turno cancelado correctamente", idTurno: idTurno });
+    }).catch((error) => {
+        res.status(404).json({ error: error.message || "Error al cancelar el turno" });
+    });
   }
 
-  create(req, res) {
-    try {
-      const { idPaciente, fechaHora } = req.body;
-      if (!idPaciente || !fechaHora) {
-        return res.status(400).json({ error: "Faltan datos obligatorios" });
-      }
-      const turno = {
-        idPaciente: Number(idPaciente),
-        fechaHora: new Date(fechaHora)
-      };
-      const nuevoTurno = turnoService.create(turno);
-      res.status(201).json(nuevoTurno);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+   async create(req, res) {
+  
+      const {idPaciente, fechaHora} = req.body;
+
+      
+
+    const nuevoTurno = {
+        idPaciente: idPaciente,
+        fechaHora: fechaHora
+    };
+
+    console.log(nuevoTurno);
+
+      await turnoService.create(nuevoTurno).then((nuevoTurno) => {
+        res.status(201).json({ message: "Turno creado", idTurno: nuevoTurno.id });
+      }).catch((error) => {
+        res.status(400).json({ error: error.message || "Error al crear el turno" });
+      });
     }
-  }
 }
-
 module.exports = new TurnosController();
