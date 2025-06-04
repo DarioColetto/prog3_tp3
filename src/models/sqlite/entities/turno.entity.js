@@ -1,8 +1,9 @@
 const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db.js');
 
 
 
-module.exports = (sequelize) => sequelize.define('Turno', {
+const Turno =  sequelize.define('Turno', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -19,3 +20,4 @@ module.exports = (sequelize) => sequelize.define('Turno', {
 })
 
 
+module.exports = Turno;

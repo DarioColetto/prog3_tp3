@@ -1,16 +1,13 @@
 const { Sequelize } = require('sequelize');
 const path = require('path');
 
+
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: path.join(__dirname, 'db', 'clinica.sqlite'),
   logging: false
 });
 
-// Importa los modelos aquí
-require('../entities/paciente.entity')(sequelize);
-require('../entities/turno.entity')(sequelize);
-// ...otros modelos
 
 const connectDB = async () => {
   try {
