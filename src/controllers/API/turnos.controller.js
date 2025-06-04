@@ -1,8 +1,12 @@
-const turnosModel = require("../../models/mock/turnos.models.js");
+const TurnoService = require('../../services/turno.service');
+
+//Todo: Cambiar por el modelo de datos que se esté utilizando
 
 class TurnosController {
   getByPaciente(req, res) {
     const idPaciente = req.params.idPaciente;
+
+    
     const turnos = turnosModel.getByPaciente(idPaciente);
     res.json(turnos);
   }

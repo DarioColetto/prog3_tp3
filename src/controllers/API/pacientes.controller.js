@@ -1,32 +1,42 @@
-const pacientesModel = require("./../../models/mock/pacientes.models.js");
-const Paciente = require("./../../models/mock/entities/paciente.entity.js");
+const pacienteService = require("../../services/paciente.service.js");
+
 
 class PacientesController {
   
   async list(req, res) {
-    res.status(200).json(await pacientesModel.list());
+    const data = await pacienteService.list();
+    res.status(200).json(data);
+    
   }
 
 
   async create(req, res) {
     const { dni, nombre, apellido, email, password } = req.body;
 
-    const nuevoPaciente = new Paciente(dni, nombre, apellido, email, password);
-
-    const info = await pacientesModel.create(nuevoPaciente);
-    res.status(200).json(info);
+    if (!dni || !nombre || !apellido || !email || !password) {
+      return res.status(400).json({ error: "Faltan datos obligatorios" });
+    }
+    try {
+      const nuevoPaciente = new Paciente(dni, nombre, apellido, email, password);
+      const pacienteCreado = await pacienteService.create(nuevoPaciente);
+      res.status(201).json({ message: "Paciente creado", id: pacienteCreado.id });
+    } catch (error) {
+      res.status(500).json({ error: error.message || "Error al crear el paciente" });
+    }
   }
 
 
   async delete(req, res) {
     try{
-    
-      
+  
     const id = req.params.id;
-    console.log("id del paciente a borrar:", id);
+    
 
 
-    const pacienteBorrado = await pacientesModel.delete(id);
+    const pacienteBorrado = await pacienteService.delete(id);
+    if (!pacienteBorrado) {
+      return res.status(404).json({ error: "Paciente no encontrado" });
+    }
 
     res.status(200).json(pacienteBorrado);
     }
