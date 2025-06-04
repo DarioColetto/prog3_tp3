@@ -16,13 +16,13 @@ class PacienteService {
     async create(data) {
         // Check if the required fields are present
         if (!data.dni || !data.nombre || !data.apellido || !data.email || !data.password) {
-            throw new Error('Missing required fields: dni, nombre, apellido, email, password');
+            throw new Error('Faltan algun campo requerido: dni, nombre, apellido, email, password');
         }
 
         // Check if the email already exists
         const existingPaciente = await repo.getByEmail(data.email);
         if (existingPaciente) {
-            throw new Error('A patient with this email already exists');
+            throw new Error('Ya existe un paciente con ese email');
         }
 
         return await repo.create(data);
@@ -32,7 +32,7 @@ class PacienteService {
 
         // Check if the required fields are present
         if (!data.dni || !data.nombre || !data.apellido || !data.email || !data.password) {
-            throw new Error('Missing required fields: dni, nombre, apellido, email, password');
+            throw new Error('Faltan algun campo requerido: dni, nombre, apellido, email, password');
         }
 
         return await repo.update(id, data);
