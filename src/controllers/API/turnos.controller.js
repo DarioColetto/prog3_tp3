@@ -14,7 +14,6 @@ class TurnosController {
         res.status(404).json({ error: error.message || "No se encontraron turnos para el paciente" });
       });
     
-     
   }
 
   async delete(req, res) {

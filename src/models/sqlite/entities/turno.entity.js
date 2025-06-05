@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db.js');
+const Paciente = require('./paciente.entity.js');
 
 
 
@@ -19,5 +20,14 @@ const Turno =  sequelize.define('Turno', {
   }
 })
 
+Turno.belongsTo(Paciente, {
+  foreignKey: 'idPaciente', // Nombre de la columna en la tabla Turno
+  as: 'paciente'
+});
+
+Paciente.hasMany(Turno, {
+  foreignKey: 'idPaciente',
+  as: 'turnos'
+});
 
 module.exports = Turno;

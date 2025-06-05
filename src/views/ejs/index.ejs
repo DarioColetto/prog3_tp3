@@ -1,176 +1,242 @@
 <!-- filepath: views/turnos/listar.ejs -->
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Gestión de Turnos</title>
-  <style>
-    body{ 
-        font-family: 'Lucida Sans';
+  <head>
+    <title>Gestión de Turnos</title>
+    <style>
+      body {
+        font-family: "Lucida Sans";
+      }
 
-    }
-    table, hr, .nuevo-paciente { border-collapse: collapse; width: 80%; margin: 20px auto; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #eee; }
-    form { display: inline; }
-    .acciones button { margin: 0 2px; }
-    .nuevo-turno { margin: 20px auto; width: 80%; }
-    .nuevo-paciente a{
-        text-align: center; 
-        margin: 20px auto; 
+      table,
+      hr,
+      .nuevo-paciente {
+        border-collapse: collapse;
+        width: 80%;
+        margin: 20px auto;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+
+      th {
+        background: #eee;
+      }
+
+      form {
+        display: inline;
+      }
+
+      .acciones button {
+        margin: 0 2px;
+      }
+
+      .nuevo-turno {
+        margin: 20px auto;
+        width: 80%;
+      }
+
+      .nuevo-paciente a {
+        text-align: center;
+        margin: 20px auto;
         width: 80%;
         border: 1px solid green;
         text-decoration: none;
         border-radius: 5px;
         color: green;
         padding: 5px;
-    }
+      }
 
-    .nuevo-paciente a:hover {
+      .nuevo-paciente a:hover {
         background-color: #f0f0f0;
         color: darkgreen;
-    }
+      }
+    </style>
+  </head>
 
-  </style>
-</head>
-<body>
-  <h1 style="text-align:center;">Gestión de Turnos</h1>
+  <body>
+    <h1 style="text-align: center">Gestión de Turnos</h1>
 
-<!-- Registrar nuevo turno -->
-<div class="nuevo-turno">
-    <h2>Registrar Nuevo Turno</h2>
-    <form action="/crearTurno" method="POST">
+    <!-- Registrar nuevo turno -->
+    <div class="nuevo-turno">
+      <h2>Registrar Nuevo Turno</h2>
+      <form action="/crearTurno" method="POST">
         <label>Paciente:</label>
         <select name="idPaciente" required>
-            <% pacientes.forEach(p => { %>
-                <option value="<%= p.id %>"><%= p.nombre %> <%= p.apellido %></option>
-            <% }) %>
+          <% pacientes.forEach(p=> { %>
+          <option value="<%= p.id %>"><%= p.nombre %> <%= p.apellido %></option>
+          <% }) %>
         </select>
         <label>Fecha:</label>
-        <input type="date" name="fechaHora" required>
+        <input type="date" name="fechaHora" required />
         <button type="submit">Registrar</button>
-    </form>
-</div>
+      </form>
+    </div>
 
-  <div class="message" >
-    <% if (message) { %>
-      <p style="color: green; text-align: center;"><%= message %></p>
-    <% } %>
-  </div>
+    <div class="message">
+      <% if (message) { %>
+      <p style="color: green; text-align: center"><%= message %></p>
+      <% } %>
+    </div>
 
-  <!-- Visualizar turnos -->
-  <h2 style="text-align:center;">Turnos Disponibles o Reservados</h2>
-  <table>
-    <tr>
-      <th>ID</th>
-      <th>Paciente</th>
-      <th>Fecha</th>
-      <th>Acciones</th>
-    </tr>
-    <% turnos.forEach(turno => { %>
+    <!-- Visualizar turnos -->
+    <h2 style="text-align: center">Turnos Disponibles o Reservados</h2>
+    <table>
       <tr>
-        <td><%= turno.id %></td>
-        <td>
-          <%= turno.Paciente ? turno.Paciente.nombre + ' ' + turno.Paciente.apellido : 'Sin paciente' %>
-        </td>
-        <td><%= turno.fechaHora %></td>
+        <th>ID</th>
+        <th>Paciente ID</th>
+        <th>Nombre</th>
+        <th>Fecha</th>
+        <th></th>
+      </tr>
+      <% turnos.forEach(turno => { %>
+    <tr>
+      <td><%= turno.id %></td>
+      <td><%= turno.paciente.id %></td>
+      <td>
+        <%= turno.paciente ? turno.paciente.nombre + ' ' + turno.paciente.apellido : 'Sin paciente' %>
+      </td>
+      <td><%= turno.fechaHora.toLocaleString() %></td>
         <td class="acciones">
           <!-- Cancelar turno -->
-          <form action="/turnos/cancelar/<%= turno.id %>" method="POST">
-            <button type="submit">Cancelar Turno</button>
-          </form>
+
+          <button id="<%= turno.id %>" class="cancelarTurno">
+            Cancelar
+          </button>
+
           <!-- Dar de baja paciente -->
           <% if (turno.Paciente) { %>
-            <form action="/pacientes/baja/<%= turno.Paciente.id %>" method="POST" onsubmit="return confirm('¿Seguro que desea dar de baja este paciente?');">
-              <button type="submit" style="background:#f88;">Dar de baja paciente</button>
-            </form>
+          <form
+            action="/pacientes/baja/<%= turno.Paciente.id %>"
+            method="POST"
+            onsubmit="return confirm('¿Seguro que desea dar de baja este paciente?');"
+          >
+            <button type="submit" style="background: #f88">
+              Dar de baja paciente
+            </button>
+          </form>
           <% } %>
         </td>
       </tr>
-    <% }) %>
-  </table>
-    
-  <hr>
-  <!-- Visualizar Crear paciete -->
-    <div class="nuevo-paciente">
-    <a href="" style="text-align:center">Registrar Nuevo Paciente</a>
-    
-    <div>
-
-    <h2 style="text-align:center;">Pacientes Registrados</h2>
-    <table>
-                
-
-        <tr>
-            <th>ID</th>
-            <th>DNI</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Email</th>
-            <th>Acciones</th>
-        </tr>
-        <% pacientes.forEach(paciente => { %>
-            <tr>
-            <td><%= paciente.id %></td>
-            <td><%= paciente.dni %></td>
-            <td><%= paciente.nombre %></td>
-            <td><%= paciente.apellido %></td>
-            <td><%= paciente.email %></td>
-            <td class="acciones">
-                <!-- Dar de baja paciente -->
-                <form action="/pacientes/baja/<%= paciente.id %>" method="POST" onsubmit="return confirm('¿Seguro que desea dar de baja este paciente?');">
-                <button type="submit" style="background:#f88;">Dar de baja</button>
-                </form>
-            </td>
-            </tr>
-        <% }) %>
-
-
+      <% }) %>
     </table>
-  
-<script>
-        // Confirmación para dar de baja paciente
-        document.querySelectorAll('form[action^="/pacientes/baja"]').forEach(form => {
-        form.addEventListener('submit', function(event) {
-            if (!confirm('¿Seguro que desea dar de baja este paciente?')) {
-            event.preventDefault();
-            }
-        });
-        });
 
-    // envia a '/crearTurno' los valores del formulario de turnos en formato JSON
+    <hr />
+    <!-- Visualizar Crear paciete -->
+    <div class="nuevo-paciente">
+      <a href="/pacienteForm" style="text-align: center">Registrar Nuevo Paciente</a>
+    </div>
+    <!-- Ver pacientes registrados -->
+    <h2 style="text-align: center">Pacientes Registrados</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>DNI</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Email</th>
+        <th>Acciones</th>
+      </tr>
+      <% pacientes.forEach(paciente=> { %>
+      <tr>
+        <td><%= paciente.id %></td>
+        <td><%= paciente.dni %></td>
+        <td><%= paciente.nombre %></td>
+        <td><%= paciente.apellido %></td>
+        <td><%= paciente.email %></td>
+        <td class="acciones">
+          <!-- Dar de baja paciente -->
  
-    document.querySelector('.nuevo-turno form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Evita el envío normal del formulario
+        <button id="<%= paciente.id %>" class="bajaButton" type="submit" style="background: #f88">Dar de baja</button>
+          
+        </td>
+      </tr>
+      <% }) %>
+    </table>
 
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
+    <script>
+      
+      // envia a '/crearTurno' los valores del formulario de turnos en formato JSON
 
-        fetch('/crearTurno', {
-            method: 'POST',
+      document
+        .querySelector(".nuevo-turno form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Evita el envío normal del formulario
+
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData.entries());
+
+          fetch("/api/v1/turnos/", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+              "Content-Type": "application/json",
             },
-            body: JSON.stringify(data)
-        })
-        .then( (response) =>{
-            response.json()
-            console.log(response)
-            if (response.ok) {
-                alert('Turno registrado exitosamente');
-                location.reload(); // Recarga la página para ver el nuevo turno
-            } else {
-                alert('Error al registrar el turno: ' + response.statusText);
-            }
-        } 
-    
-        
-    )
-    
-        .catch(error => console.error('Error:', error));
-    });
-    
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              response.json();
+              if (response.ok) {
+                  alert("Turno registrado exitosamente");
+                  location.reload(); // Recarga la página para ver el nuevo turno
+                  console.log(response);
+              } else {
+                alert("Error al registrar el turno: " + response.statusText);
+              }
+            })
 
+            .catch((error) => console.error("Error:", error));
+        });
+
+      //Logica para cancelar turno fetch to /:idTurno. El idTurno se obtiene del atributo data-id del botón de cancelar turno.
+      //Debe enviar un param request POST a la ruta DEL '/eliminarTurno/:id'
+
+      document.querySelectorAll(".cancelarTurno").forEach((button) => {
+        button.addEventListener("click", function () {
+          const idTurno = this.id; // Obtiene el id del turno desde el botón
+          console.log(idTurno);
+          if (confirm("¿Seguro que desea cancelar este turno?")) {
+            fetch(`/api/v1/turnos/${idTurno}`, {
+              method: "DELETE", // Usamos DELETE para cancelar el turno
+            })
+              .then((response) => {
+                if (response.ok) {
+                  alert("Turno cancelado exitosamente");
+                  location.reload(); // Recarga la página para ver los cambios
+                } else {
+                  alert("Error al cancelar el turno: " + response.statusText);
+                }
+              })
+              .catch((error) => console.error("Error:", error));
+          }
+        });
+      });
+
+      // Logica para dar de baja paciente
+        document.querySelectorAll(".bajaButton").forEach((button) => {
+            button.addEventListener("click", function (event) {
+            event.preventDefault(); // Evita el envío normal del formulario
+            const idPaciente = this.id; // Obtiene el id del paciente desde el botón
+            if (confirm("¿Seguro que desea dar de baja este paciente?")) {
+                fetch(`/api/v1/pacientes/${idPaciente}`, {
+                method: "DELETE", // Usamos DELETE para dar de baja el paciente
+                })
+                .then((response) => {
+                    if (response.ok) {
+                    alert("Paciente dado de baja exitosamente");
+                    location.reload(); // Recarga la página para ver los cambios
+                    } else {
+                    alert("Error al dar de baja el paciente: " + response.statusText);
+                    }
+                })
+                .catch((error) => console.error("Error:", error));
+            }
+            });
+        });
 
     </script>
-</body>
+  </body>
 </html>

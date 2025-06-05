@@ -11,8 +11,11 @@
   </style>
 </head>
 <body>
+   <!-- Button back to home-->
+    <a href="/" style="display: block; text-align: center; margin: 20px; text-decoration: none; color: blue;">Volver al Inicio</a>
+    
   <h1 style="text-align:center;">Registrar Nuevo Paciente</h1>
-  <form action="/pacientes/crear" method="POST">
+  <form>
     <label>DNI:</label>
     <input type="text" name="dni" required>
     <label>Nombre:</label>
@@ -25,6 +28,39 @@
     <input type="password" name="password" required>
     <button type="submit">Crear Paciente</button>
   </form>
+
+
+  <script>
+    //take values from form and fetch to /api/v1/pacientes/
+    document.querySelector('form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      fetch('/api/v1/pacientes/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(
+        (response) =>{
+            response.json()
+            if(response.ok) {
+                alert('Paciente creado exitosamente');
+                window.location.href = '/'; // Redirect to home
+                console.log(response) 
+            } else {
+                alert('Error al crear paciente: ' + data.message);
+              
+            }
+        } )
+      .catch(error => console.error('Error:', error));
+    });
+
+
+  </script>
 
 </body>
 </html>

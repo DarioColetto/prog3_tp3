@@ -35,6 +35,10 @@ class TurnoService {
         }
         return await repo.delete(id);
     }
+
+    async getTurnosWithPacientes() {
+        return await repo.getTurnosWithPacientes();
+    }
     
 }
 

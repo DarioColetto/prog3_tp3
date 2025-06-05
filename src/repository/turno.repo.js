@@ -1,4 +1,5 @@
 const Turno = require('../models/sqlite/entities/turno.entity.js');
+const Paciente = require('../models/sqlite/entities/paciente.entity.js');
 
 class TurnoRepository{
     
@@ -21,6 +22,19 @@ class TurnoRepository{
     async delete(id) {
         return await Turno.destroy({ where: { id } });
     }
+
+    //JOIN turnos with pacientes where idPaciente matches Paciente.id
+    async getTurnosWithPacientes() {
+        return await Turno.findAll({
+      include: {
+        model: Paciente,
+        as: 'paciente',
+        attributes: ['id', 'nombre', 'apellido']
+      }
+    });
+    }
 }
+
+
 
 module.exports = new TurnoRepository();
