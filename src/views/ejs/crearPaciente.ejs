@@ -32,16 +32,21 @@
 
   <script>
     //take values from form and fetch to /api/v1/pacientes/
+
+    console.log(localStorage.getItem("token"),)
+  
     document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       const formData = new FormData(this);
       const data = Object.fromEntries(formData.entries());
 
+
       fetch('/api/v1/pacientes/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-        },
+                "Content-Type": "application/json",
+                "authorization": localStorage.getItem("token"), // Agrega el token de autenticación
+              },
         body: JSON.stringify(data)
       })
       .then(

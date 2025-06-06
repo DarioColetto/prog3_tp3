@@ -20,14 +20,25 @@ const Turno =  sequelize.define('Turno', {
   }
 })
 
+
+// Turno pertenece a Paciente
 Turno.belongsTo(Paciente, {
-  foreignKey: 'idPaciente', // Nombre de la columna en la tabla Turno
-  as: 'paciente'
+  foreignKey: 'idPaciente',
+  as: 'paciente',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
 });
 
+// Paciente tiene muchos Turnos
 Paciente.hasMany(Turno, {
   foreignKey: 'idPaciente',
-  as: 'turnos'
+  as: 'turnos',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+  hooks: true
 });
+
+
+
 
 module.exports = Turno;

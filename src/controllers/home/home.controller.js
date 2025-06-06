@@ -20,7 +20,7 @@ class HomeController {
     // );
         
     
-      res.render("index", { pacientes, turnos, message: "Bienvenido a la aplicación de gestión de turnos" });
+      res.render("index", { pacientes, turnos });
     } catch (error) {
       res
         .status(500)

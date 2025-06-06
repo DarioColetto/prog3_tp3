@@ -29,4 +29,7 @@ const Paciente = sequelize.define('Paciente', {
 
 
 
+
+
+
 module.exports = Paciente;
