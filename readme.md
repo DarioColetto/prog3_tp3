@@ -173,6 +173,42 @@ src/
 
 ---
 
+---
+## Base de datos
+La base de datos se encuentra dentro de la carpeta **models/config/db/** .
+En caso de quere inicializarla desde cero, se puede optar por eliminar la base de datos e iniciar la aplicacion. Esto creara una base de datos nueva con las confiuracionnes de los Modelos realizados con Sequalize.
+
+Si quisera agregar datos de prueba se puede optar por usar miraciones o usar algun estor de Base de Datos como DBBrowser.
+
+- Ver
+[Guia de Migraciones en Sequalize](https://sequelize.org/docs/v6/other-topics/migrations/)
+
+- Ver
+[DBBrowser](https://sqlitebrowser.org/)
+
+Query para iniciar paciente.
+
+```sql
+INSERT INTO Pacientes (dni, nombre, apellido, email, password, createdAt, updatedAt)
+VALUES ('12345678', 'Juan', 'Pérez', 'juan@example.com', 'clave123', datetime('now'), datetime('now'));
+```
+
+Query para iniciar turno asociado al paciente.
+
+```sql
+INSERT INTO Turnos (idPaciente, createdAt, updatedAt, fechaHora)
+VALUES
+(1, datetime('now'), datetime('now'), '2025-06-10 10:00:00'),
+(1, datetime('now'), datetime('now'), '2025-06-15 15:00:00');
+
+```
+
+
+
+
+
+
+
 ## Notas
 
 - El sistema utiliza JWT para proteger los endpoints sensibles.
@@ -180,10 +216,3 @@ src/
 - Puedes usar herramientas como Postman o Thunder Client para probar la API REST.
 - La interfaz web está en EJS y es amigable para el personal de la clínica.
 
----
-
-## Autor
-
-Daro Coletto
-
----
